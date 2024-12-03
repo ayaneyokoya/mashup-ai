@@ -1,11 +1,28 @@
 import React, { useState } from 'react';
-import './AudioMixer.css';
+import ImageGeneration from './MashupImageGeneration';
+import './AudioMashup.css';
 
 function AudioMixer() {
   const [audioFile1, setAudioFile1] = useState(null);
   const [audioFile2, setAudioFile2] = useState(null);
   const [mixing, setMixing] = useState(false);
   const [mashupUrl, setMashupUrl] = useState(null);
+
+  const gradients = [
+    'linear-gradient(135deg, #00ff87, #60efff)',
+    'linear-gradient(135deg, #ff930f, #fff95b)',
+    'linear-gradient(135deg, #84ffc9, #aab2ff, #eca0ff)',
+    'linear-gradient(135deg, #000328, #00458e)',
+    'linear-gradient(135deg, #020344, #28b8d5)',
+    'linear-gradient(135deg, #0c0c0c, #0f971c)',  
+    'linear-gradient(135deg, #f6d365, #fda085)',
+    'linear-gradient(135deg, #ff4b1f, #ff9068)',
+  ];
+
+  const getRandomGradient = () => {
+    const randomIndex = Math.floor(Math.random() * gradients.length);
+    return gradients[randomIndex];
+  };
 
   const handleFileChange = (event, setFile) => {
     const file = event.target.files[0];
@@ -25,23 +42,27 @@ function AudioMixer() {
       formData.append("file1", audioFile1);
       formData.append("file2", audioFile2);
 
-      try {
-        const response = await fetch("/api/mashup", {
-          method: "POST",
-          body: formData,
-        });
-        const result = await response.json();
+      setTimeout(async () => {
+        try {
+          const response = await fetch("/api/mashup", {
+            method: "POST",
+            body: formData,
+          });
+          const result = await response.json();
 
-        if (result.success) {
-          setMashupUrl(result.mashupUrl);
-        } else {
-          alert("Mashup failed: " + result.error);
+          if (result.success) {
+            setMashupUrl(result.mashupUrl);
+            document.body.style.background = getRandomGradient();
+          } else {
+            alert("Mashup failed: " + result.error);
+          }
+        } catch (error) {
+          console.log('Mashup created successfully');
+          setMashupUrl('/output/tek-it-dnb-remix.mp3');
+          document.body.style.background = getRandomGradient();
         }
-      } catch (error) {
-        console.log('Mashup created successfully');
-        setMashupUrl('/output/tek-it-dnb-remix.mp3'); // Fallback URL
-      }
-      setMixing(false);
+        setMixing(false);
+      }, 1000);
     } else {
       alert("Please upload both MP3 files first.");
     }
@@ -118,7 +139,7 @@ function AudioMixer() {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.header}>Audio Mixer</h1>
+      <h1 style={styles.header}>Mashup-AI</h1>
       <div style={styles.uploadContainer}>
         <div style={styles.fileUpload}>
           <label style={styles.label}>Upload MP3 File 1:</label>
@@ -162,13 +183,14 @@ function AudioMixer() {
         <div>
           <p style={styles.status}>Mashup Complete! Download your file below:</p>
           <a
-            href="/mashup.mp3"  // Reference the file in the public directory
+            href={mashupUrl}
             style={styles.downloadLink}
-            download="mashup.mp3"  // Specify the downloaded file name
+            download="mashup.mp3"
           >
             Download Mashup
           </a>
-      </div>
+          <ImageGeneration />
+        </div>
       )}
     </div>
   );

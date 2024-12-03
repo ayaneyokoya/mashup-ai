@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import Background from './components/Background';
-import AudioMixer from './components/AudioMixer';
+import AudioMixer from './components/AudioMashup';
 
 function App() {
   return (
