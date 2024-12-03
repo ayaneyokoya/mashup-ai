@@ -17,6 +17,7 @@ function AudioMixer() {
     'linear-gradient(135deg, #0c0c0c, #0f971c)',  
     'linear-gradient(135deg, #f6d365, #fda085)',
     'linear-gradient(135deg, #ff4b1f, #ff9068)',
+    'linear-gradient(135deg, #f40752, #c3e1fc',
   ];
 
   const getRandomGradient = () => {
@@ -62,7 +63,7 @@ function AudioMixer() {
           document.body.style.background = getRandomGradient();
         }
         setMixing(false);
-      }, 1000);
+      }, 100000000);
     } else {
       alert("Please upload both MP3 files first.");
     }

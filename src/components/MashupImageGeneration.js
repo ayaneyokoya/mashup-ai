@@ -22,7 +22,7 @@ const ImageGeneration = () => {
           show_base_64: true,
           show_original_response: false,
           num_images: 1,
-          text: 'abstract',
+          text: 'a person in space with atro lights',
           providers: ['amazon'],
           resolution: '512x512'
         })
